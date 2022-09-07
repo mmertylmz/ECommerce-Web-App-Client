@@ -1,7 +1,17 @@
-<ul>
-  <li><a routerLink="/admin">Dashboard</a></li>
-  <li><a routerLink="customers">Customers</a></li>
-  <li><a routerLink="products">Products</a></li>
-  <li><a routerLink="orders">Orders</a></li>
-  <li><a routerLink="">Siteyi Gör</a></li>
-</ul>
+<mat-list role="list">
+  <a mat-list-item role="listitem" routerLink="/admin">
+    <button mat-button color="primary">Dashboard</button>
+  </a>
+  <a mat-list-item role="listitem" routerLink="customers">
+    <button mat-button color="primary">Customers</button>
+  </a>
+  <a mat-list-item role="listitem" routerLink="products">
+    <button mat-button color="primary">Products</button>
+  </a>
+  <a mat-list-item role="listitem" routerLink="orders">
+    <button mat-button color="primary">Orders</button>
+  </a>
+  <a mat-list-item role="listitem" routerLink="">
+    <button mat-button color="primary">Siteyi Gör</button>
+  </a>
+</mat-list>
