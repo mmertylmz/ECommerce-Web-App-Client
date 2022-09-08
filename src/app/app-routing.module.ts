@@ -20,8 +20,8 @@ const routes: Routes = [
       {
         path: 'products',
         loadChildren: () =>
-          import('./admin/components/customers/customers.module').then(
-            (module) => module.CustomersModule
+          import('./admin/components/products/products.module').then(
+            (module) => module.ProductsModule
           ),
       },
       {
