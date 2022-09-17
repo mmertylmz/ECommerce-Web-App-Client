@@ -8,12 +8,17 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
 import { CreateComponent } from './create/create.component';
 import { ListComponent } from './list/list.component';
+import { DeleteDirective } from 'src/app/directives/admin/delete.directive';
 
 @NgModule({
-  declarations: [ProductsComponent, CreateComponent, ListComponent],
+  declarations: [
+    ProductsComponent,
+    CreateComponent,
+    ListComponent,
+    DeleteDirective,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild([{ path: '', component: ProductsComponent }]),
