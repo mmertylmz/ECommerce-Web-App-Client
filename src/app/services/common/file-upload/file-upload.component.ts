@@ -1,6 +1,11 @@
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { NgxFileDropEntry } from 'ngx-file-drop';
+import {
+  FileUploadDialogComponent,
+  FileUploadDialogState,
+} from 'src/app/dialogs/file-upload-dialog/file-upload-dialog.component';
 import {
   AlertifyService,
   MessageType,
@@ -11,6 +16,7 @@ import {
   ToastrMessageType,
   ToastrPosition,
 } from '../../ui/custom-toastr.service';
+import { DialogService } from '../dialog.service';
 import { HttpClientService } from '../http-client.service';
 
 @Component({
@@ -22,7 +28,9 @@ export class FileUploadComponent {
   constructor(
     private httpClientService: HttpClientService,
     private alertifyService: AlertifyService,
-    private customToastrService: CustomToastrService
+    private customToastrService: CustomToastrService,
+    private dialog: MatDialog,
+    private dialogService: DialogService
   ) {}
 
   public files: NgxFileDropEntry[];
@@ -64,31 +72,51 @@ export class FileUploadComponent {
   public selectedFiles(files: NgxFileDropEntry[]) {
     this.files = files;
     const fileData: FormData = new FormData();
+
     for (const file of files) {
       (file.fileEntry as FileSystemFileEntry).file((_file: File) => {
         fileData.append(_file.name, _file, file.relativePath);
       });
     }
 
-    this.httpClientService
-      .post(
-        {
-          controller: this.options.controller,
-          action: this.options.action,
-          queryString: this.options.queryString,
-          headers: new HttpHeaders({ responseType: 'blob' }),
-        },
-        fileData
-      )
-      .subscribe(
-        (data) => {
-          this.successNotification();
-        },
-        (errorResponse: HttpErrorResponse) => {
-          this.errorNotifcation();
-        }
-      );
+    this.dialogService.openDialog({
+      componentType: FileUploadDialogComponent,
+      data: FileUploadDialogState.Yes,
+      afterClosed: () => {
+        this.httpClientService
+          .post(
+            {
+              controller: this.options.controller,
+              action: this.options.action,
+              queryString: this.options.queryString,
+              headers: new HttpHeaders({ responseType: 'blob' }),
+            },
+            fileData
+          )
+          .subscribe(
+            (data) => {
+              this.successNotification();
+            },
+            (errorResponse: HttpErrorResponse) => {
+              this.errorNotifcation();
+            }
+          );
+      },
+    });
   }
+
+  // openDialog(afterClosed: any): void {
+  //   const dialogRef = this.dialog.open(FileUploadDialogComponent, {
+  //     width: '250px',
+  //     data: FileUploadDialogState.Yes,
+  //   });
+
+  //   dialogRef.afterClosed().subscribe((result) => {
+  //     if (result == FileUploadDialogState.Yes) {
+  //       afterClosed();
+  //     }
+  //   });
+  // }
 }
 
 export class FileUploadOptions {
