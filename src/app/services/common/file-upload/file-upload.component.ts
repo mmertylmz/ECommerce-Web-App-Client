@@ -2,6 +2,8 @@ import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgxFileDropEntry } from 'ngx-file-drop';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { SpinnerType } from 'src/app/base/base.component';
 import {
   FileUploadDialogComponent,
   FileUploadDialogState,
@@ -30,7 +32,8 @@ export class FileUploadComponent {
     private alertifyService: AlertifyService,
     private customToastrService: CustomToastrService,
     private dialog: MatDialog,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private spinner: NgxSpinnerService
   ) {}
 
   public files: NgxFileDropEntry[];
@@ -83,6 +86,7 @@ export class FileUploadComponent {
       componentType: FileUploadDialogComponent,
       data: FileUploadDialogState.Yes,
       afterClosed: () => {
+        this.spinner.show(SpinnerType.BallAtom);
         this.httpClientService
           .post(
             {
@@ -96,8 +100,10 @@ export class FileUploadComponent {
           .subscribe(
             (data) => {
               this.successNotification();
+              this.spinner.hide(SpinnerType.BallAtom);
             },
             (errorResponse: HttpErrorResponse) => {
+              this.spinner.hide(SpinnerType.BallAtom);
               this.errorNotifcation();
             }
           );

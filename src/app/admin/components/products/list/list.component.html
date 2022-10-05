@@ -27,6 +27,14 @@
       <td mat-cell *matCellDef="let element"> {{element.updatedDate | date:'short'}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="photos">
+      <th mat-header-cell *matHeaderCellDef width="30px"> </th>
+      <td mat-cell *matCellDef="let element">
+        <img style="cursor:pointer;" src="/assets/foto.png" (click)="addProductImages(element.id)" width="25px"
+          height="25px" alt="">
+      </td>
+    </ng-container>
+
     <ng-container matColumnDef="edit">
       <th mat-header-cell *matHeaderCellDef width="30px"> </th>
       <td mat-cell *matCellDef="let element">
